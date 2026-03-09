@@ -6,11 +6,10 @@
   "scripts": {
     "dev": "vite",
 
-    "merge:prod": "git checkout production && git merge staging",
-
+    "merge:prod": "git checkout production && git merge staging && git push origin production",
     "build": "tsc -b && vite build",
     "build:prod": "vite build && gh-pages -d dist",
-
+    "release": "git checkout production && git merge staging && git push origin production && vite build && gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
