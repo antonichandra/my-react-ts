@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "release": "git checkout production && git merge staging && git push origin production",
+    "build:prod": "vite build",
+    "release": "git checkout production && git merge staging && git push origin production && git checkout production",
     "lint": "eslint .",
     "preview": "vite preview"
   },
