@@ -8,7 +8,6 @@ import UnauthorizedPage from './pages/UnauthorizedPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ErrorPage from './pages/ErrorPage';
 import DashboardPage from './pages/DashboardPage';
-import EditProfilePage from './pages/EditProfilePage';
 import ProductPage from './pages/ProductPage';
 
 // Protected layout wrapper for authenticated routes
