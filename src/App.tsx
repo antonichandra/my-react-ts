@@ -42,7 +42,7 @@ const router = createBrowserRouter([
   
   // Catch-all redirect
   { path: '*', element: <Navigate to="/404" replace /> },
-]);
+], { basename: '/my-react-ts' });
 
 function App() {
   return (
