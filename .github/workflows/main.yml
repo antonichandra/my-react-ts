@@ -1,0 +1,33 @@
+name: Deploy React Vite to GitHub Pages
+
+on:
+  push:
+    branches:
+      - production  # trigger otomatis saat ada push di production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout kode
+      - uses: actions/checkout@v3
+
+      # 2️⃣ Setup Node.js
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3️⃣ Install dependencies
+      - run: npm ci
+
+      # 4️⃣ Build project
+      - run: npm run build:prod
+
+      # 5️⃣ Deploy dist/ ke gh-pages
+      - uses: peaceiris/actions-gh-pages@v5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true  # overwrite branch gh-pages
