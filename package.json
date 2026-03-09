@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:prod": "vite build",
-    "deploy": "cd dist && git init && git add . && git commit -m 'Deploy' && git push -f origin gh-pages",
+    "deploy": "cd dist && git init && git checkout -b gh-pages && git add . && git commit -m 'Deploy' && git remote add origin https://github.com/antonichandra/my-react-ts.git && git push -f origin gh-pages",
+    
     "release": "git checkout production && git merge staging && git push origin production && npm run build:prod && npm run deploy",
     "lint": "eslint .",
     "preview": "vite preview"
