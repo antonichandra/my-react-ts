@@ -1,14 +1,15 @@
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './components/ThemeProvider';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ThemeProvider } from './components/ThemeProvider';
+import { AuthProvider } from './context/AuthContext';
 import AuthLayout from './layouts/AuthLayout';
-import LoginPage from './pages/LoginPage';
-import UnauthorizedPage from './pages/UnauthorizedPage';
-import NotFoundPage from './pages/NotFoundPage';
-import ErrorPage from './pages/ErrorPage';
 import DashboardPage from './pages/DashboardPage';
+import EditProfilePage from './pages/EditProfilePage';
+import ErrorPage from './pages/ErrorPage';
+import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
 import ProductPage from './pages/ProductPage';
+import UnauthorizedPage from './pages/UnauthorizedPage';
 
 // Protected layout wrapper for authenticated routes
 const ProtectedLayout = () => (
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: '/', element: <DashboardPage /> },
-      // { path: '/profile/edit', element: <EditProfilePage /> },
+      { path: '/profile/edit', element: <EditProfilePage /> },
       { path: '/product', element: <ProductPage /> },
     ],
   },
