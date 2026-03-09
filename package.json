@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-
-    "merge:prod": "git checkout production && git merge staging && git push origin production",
     "build": "tsc -b && vite build",
-    "build:prod": "vite build && gh-pages -d dist -b gh-pages -f",
-    "release": "git checkout production && git merge staging && git push origin production && vite build && gh-pages -d dist -b gh-pages -f",
+    "build:prod": "vite build",
+    "deploy": "cd dist && git init && git add . && git commit -m 'Deploy' && git push -f origin gh-pages",
+    "release": "git checkout production && git merge staging && git push origin production && npm run build:prod && npm run deploy",
     "lint": "eslint .",
     "preview": "vite preview"
   },
