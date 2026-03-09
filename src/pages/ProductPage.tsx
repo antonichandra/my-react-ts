@@ -47,7 +47,7 @@ export default function ProductPage() {
   const [isSaving, setIsSaving] = useState(false);
   
   const initialData: Partial<ProductFormData> = {
-    name: '',
+    name: 'Pocari',
     description: '',
     price: '',
     cost: '',
