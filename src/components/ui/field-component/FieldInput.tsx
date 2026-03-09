@@ -1,0 +1,54 @@
+import { Input, type InputProps } from '../Input';
+
+interface FieldInputProps {
+  label: string;
+  field: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  error?: string;
+  required?: boolean;
+  disabled?: boolean;
+  hidden?: boolean;
+  className?: string;
+  colSpan?: number;
+  props?: InputProps;
+}
+
+/**
+ * FieldInput - A complete input field component with label, input, and error handling
+ */
+export function FieldInput({
+  label,
+  field,
+  value,
+  onChange,
+  error,
+  required,
+  disabled,
+  hidden,
+  className,
+  colSpan,
+  props,
+}: FieldInputProps) {
+  if (hidden) return null;
+
+  const colSpanClass = colSpan === 2 ? 'col-span-2' : '';
+
+  return (
+    <div className={`grid gap-2 ${colSpanClass} ${className || ''}`}>
+      <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+      <Input
+        id={field}
+        value={value || ''}
+        onChange={onChange}
+        disabled={disabled}
+        {...(props || {})}
+      />
+      {error && <p className="text-sm text-red-500">{error}</p>}
+    </div>
+  );
+}
+
