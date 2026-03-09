@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+
+    "merge:prod": "git checkout production && git merge staging",
+
     "build": "tsc -b && vite build",
     "build:prod": "vite build && gh-pages -d dist",
+
     "lint": "eslint .",
     "preview": "vite preview"
   },
