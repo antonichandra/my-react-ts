@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "../../lib/utils"
 import type { LucideIcon } from "lucide-react"
+import { NumericFormat } from "react-number-format";
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
   value?: string | number;
@@ -14,8 +15,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   iconClassName?: string;
   onIconClick?: () => void;
   currency?: boolean;
-  thousandSeparator?: string;
-  decimalSeparator?: string;
+  allowNegative?: boolean;
   decimalScale?: number;
 }
 
@@ -33,85 +33,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     iconPosition = 'left',
     iconClassName,
     onIconClick,
-    currency = false,
-    thousandSeparator = '.',
-    decimalSeparator = ',',
+    currency = true,
+    allowNegative,
     decimalScale = 0,
     placeholder,
     ...props 
   }, ref) => {
     const [displayValue, setDisplayValue] = React.useState('');
 
-    // Format number with separators for currency mode
-    const formatNumber = (val: string): string => {
-      let cleanValue = val.replace(new RegExp(`[^\\d${decimalSeparator}]`, 'g'), '');
-      const parts = cleanValue.split(decimalSeparator);
-      let integerPart = parts[0];
-      let decimalPart = parts[1] || '';
-      
-      if (decimalPart.length > decimalScale) {
-        decimalPart = decimalPart.slice(0, decimalScale);
-      }
-      
-      integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
-      
-      if (decimalScale > 0 && decimalPart) {
-        return `${integerPart}${decimalSeparator}${decimalPart}`;
-      }
-      
-      return integerPart;
-    };
-
-    // Parse formatted value back to raw number string
-    const parseValue = (formatted: string): string => {
-      return formatted.replace(new RegExp(`\\${thousandSeparator}`, 'g'), '').replace(decimalSeparator, '.');
-    };
-
-    // Update display value when prop value changes
-    React.useEffect(() => {
-      if (value !== undefined && value !== '') {
-        const stringValue = String(value);
-        if (currency) {
-          const formatted = formatNumber(stringValue);
-          setDisplayValue(formatted);
-        } else {
-          setDisplayValue(stringValue);
-        }
-      } else {
-        setDisplayValue('');
-      }
-    }, [value, currency]);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value;
       
-      if (currency) {
-        const cleanValue = inputValue.replace(new RegExp(`[^\\d${decimalSeparator}]`, 'g'), '');
-        const formatted = formatNumber(cleanValue);
-        setDisplayValue(formatted);
-        const rawValue = parseValue(formatted);
-        onChange?.(rawValue);
-      } else {
-        setDisplayValue(inputValue);
-        onChange?.(inputValue);
-      }
+      setDisplayValue(inputValue);
+      onChange?.(inputValue);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (!currency) return;
-      
-      if (['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) return;
-      if ((e.ctrlKey || e.metaKey) && ['a', 'c', 'v', 'x'].includes(e.key.toLowerCase())) return;
-      if (['Home', 'End', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
-      if (/^\d$/.test(e.key)) return;
-      if (e.key === decimalSeparator && decimalScale > 0 && !displayValue.includes(decimalSeparator)) return;
-      
-      e.preventDefault();
-    };
-
-    const inputType = currency ? "text" : type;
-    const inputMode = currency ? "numeric" : undefined;
-    const actualValue = currency ? displayValue : (value || '');
+    const inputMode = type === 'number' || type === 'phone' ? "numeric" : undefined;
 
     // Check if icon is a Lucide component or a string
     const isLucideIcon = icon && typeof icon !== 'string';
@@ -212,23 +149,40 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {prefix}
           </span>
         )}
-        
-        <input
-          type={inputType}
-          inputMode={inputMode}
-          value={actualValue}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          className={cn(
-            "flex h-10 w-full rounded-md border border-zinc-200 bg-white py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300",
-            paddingLeft,
-            paddingRight,
-            className
-          )}
-          ref={ref}
-          {...props}
-        />
+
+        {type === "number" ? (
+          <NumericFormat
+            thousandSeparator={currency ? ',' : null}
+            decimalScale={decimalScale}
+            allowNegative={allowNegative}
+            value={value}
+            onValueChange={(values) => onChange?.(values.formattedValue)}
+            placeholder={placeholder}
+            className={cn(
+              "flex h-10 w-full rounded-md border border-zinc-200 bg-white py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300",
+              paddingLeft,
+              paddingRight,
+              className
+            )}
+            {...props as any}
+          />
+        ) : (
+          <input
+            type={type}
+            inputMode={inputMode}
+            value={value}
+            onChange={handleChange}
+            placeholder={placeholder}
+            className={cn(
+              "flex h-10 w-full rounded-md border border-zinc-200 bg-white py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300",
+              paddingLeft,
+              paddingRight,
+              className
+            )}
+            ref={ref}
+            {...props}
+          />
+        )}
         
         {/* Suffix (if no right icon) */}
         {!(iconPosition === 'right' && icon) && suffix && (

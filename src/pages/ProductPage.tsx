@@ -11,6 +11,7 @@ import { useFormData } from '../hooks/useFormData';
 interface ProductFormData {
   name: string;
   description: string;
+  phoneNumber: string;
   price: string;
   cost: string;
   category: string;
@@ -49,6 +50,7 @@ export default function ProductPage() {
   const initialData: Partial<ProductFormData> = {
     name: 'Pocari',
     description: '',
+    phoneNumber: '',
     price: '',
     cost: '',
     category: '',
@@ -107,9 +109,10 @@ export default function ProductPage() {
     { component: 'textarea', label: 'Description', field: 'description', colSpan: 2, props: { placeholder: 'Enter product description' } },
     { component: 'select', label: 'Category', field: 'category', required: true, colSpan: 1, props: { options: categoryOptions, placeholder: 'Select category', searchable: true } },
     { component: 'input', label: 'SKU', field: 'sku', colSpan: 1, props: { placeholder: 'Enter SKU' } },
+    { component: 'input', label: 'Phone Number', field: 'phoneNumber', colSpan: 1, props: { type: 'number', prefix: '+62', placeholder: '81333767638', currency: false, allowNegative: false } },
     { component: 'title', label: 'Pricing', icon: DollarSign, colSpan: 2 },
-    { component: 'input', label: 'Selling Price', field: 'price', required: true, colSpan: 1, props: { currency: true, prefix: '$', placeholder: '0.00', decimalScale: 2 } },
-    { component: 'input', label: 'Cost Price', field: 'cost', colSpan: 1, props: { currency: true, prefix: '$', placeholder: '0.00', decimalScale: 2 } },
+    { component: 'input', label: 'Selling Price', field: 'price', required: true, colSpan: 1, props: { type: 'number', prefix: '$', placeholder: '0.00', decimalScale: 2 } },
+    { component: 'input', label: 'Cost Price', field: 'cost', colSpan: 1, props: { type: 'number', prefix: '$', placeholder: '0.00', decimalScale: 2 } },
     { component: 'title', label: 'Inventory', icon: Layers, colSpan: 2 },
     { component: 'input', label: 'Current Stock', field: 'stock', colSpan: 1, props: { type: 'number', placeholder: '0' } },
     { component: 'input', label: 'Minimum Stock', field: 'minStock', colSpan: 1, props: { type: 'number', placeholder: '10' } },

@@ -1,3 +1,4 @@
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
@@ -6,10 +7,15 @@ import { Pencil, ArrowLeft, Plus } from 'lucide-react';
 
 import { ModeToggle } from '../components/ModeToggle';
 import { PageWrapper } from '../components/ui/PageWrapper';
+import { useState, useRef } from 'react';
+import { NumericFormat } from 'react-number-format';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [percentage, setPercentage] = useState<string>('');
+ 
 
   return (
     <div className="min-h-screen p-4 sm:p-6 md:p-8">
@@ -91,3 +97,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

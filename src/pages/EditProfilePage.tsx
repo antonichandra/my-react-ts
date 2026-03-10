@@ -364,12 +364,9 @@ export default function EditProfilePage() {
                   error={formData.error.initialBalance}
                   colSpan={1}
                   props={{
-                    currency: true,
+                    type: 'number',
                     prefix: 'Rp',
                     placeholder: '0',
-                    thousandSeparator: '.',
-                    decimalSeparator: ',',
-                    decimalScale: 0,
                     icon: Wallet,
                     iconPosition: 'left',
                   }}
